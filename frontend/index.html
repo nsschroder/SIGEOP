@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SIGEOP</title>
+
+    <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="background"></div>
+
+    <div class="login-container">
+
+        <div class="logo">
+            <h1>SIGEOP</h1>
+            <p>Sistema de Gestão Operacional</p>
+        </div>
+
+        <form class="login-box">
+
+            <h2>Acesso ao Sistema</h2>
+
+            <input type="text" placeholder="Usuário" required>
+            <input type="password" placeholder="Senha" required>
+
+            <button onclick="entrar()">Entrar</button>
+
+
+
+        </form>
+
+        <div class="footer">
+            <p>Polícia Militar do Estado de São Paulo</p>
+        </div>
+
+    </div>
+
+    <script>
+        function entrar() {
+            window.location.href = "pages/dashboard.html";
+        }
+    </script>
+
+</body>
+
+</html>
