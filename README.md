@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SIGEOP – Sistema de Gestão Operacional
 
 ## Descrição
@@ -91,3 +92,7 @@ O sistema está sendo desenvolvido com foco na simplicidade de uso em ambiente o
 ---
 
 NICHOLAS SCHRODER.
+=======
+# SIGEOP
+Solução para centralização e automação do processo de escala e composição de equipes operacionais.
+>>>>>>> 940aecd371aaadd9e7eca40f9bd8d323bb6e8556
