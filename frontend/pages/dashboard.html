@@ -9,30 +9,47 @@
 
 <body>
 
-    <div class="dashboard-container">
+    <div class="dashboard">
 
-        <header>
-            <h1>SIGEOP</h1>
-            <span>Usuário: Operador</span>
-        </header>
+        <!-- MENU LATERAL -->
+        <aside class="sidebar">
+            <h2>SIGEOP</h2>
 
-        <main>
+            <nav>
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="escala.html">Escala</a>
+                <a href="sinc.html">Sincronização</a>
+                <a href="#">Viaturas</a>
+                <a href="#">Policiais</a>
+                <a href="#">TPD</a>
+            </nav>
+        </aside>
 
-            <div class="cards">
+        <!-- CONTEÚDO -->
+        <main class="content">
 
-                <a href="#" class="card">📅 Gerar Escala</a>
-                <a href="#" class="card">👥 Ver Equipes</a>
-                <a href="#" class="card">📡 Sincronização</a>
-                <a href="#" class="card">📊 Relatórios</a>
+            <header class="topbar">
+                <span>Bem-vindo, Schroder</span>
+            </header>
 
-            </div>
+            <section class="cards">
 
-            <div class="resumo">
-                <h2>Resumo do Dia</h2>
-                <p>🚓 Viaturas ativas: 0</p>
-                <p>👮 Policiais em serviço: 0</p>
-                <p>📟 TPD disponíveis: 0</p>
-            </div>
+                <div class="card">
+                    <h3>Viaturas Ativas</h3>
+                    <p>0</p>
+                </div>
+
+                <div class="card">
+                    <h3>Policiais em Serviço</h3>
+                    <p>0</p>
+                </div>
+
+                <div class="card">
+                    <h3>TPD Disponíveis</h3>
+                    <p>0</p>
+                </div>
+
+            </section>
 
         </main>
 

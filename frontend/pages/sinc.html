@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sincronização - SIGEOP</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <aside class="sidebar">
+            <h2>SIGEOP</h2>
+            <nav>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="escala.html">Escala</a>
+                <a href="sinc.html" class="active">Sincronização</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+
+            <header class="topbar">
+                <h2>Sincronização Operacional</h2>
+            </header>
+
+            <div class="controls">
+                <input type="date" id="data-servico">
+
+                <select id="base-servico">
+                    <option value="">--Selecione a Base--</option>
+                    <option value="Itirapina">Base Itirapina</option>
+                    <option value="RioClaro">Base Rio Claro</option>
+                </select>
+            </div>
+
+            <button onclick="adicionarLinha()">➕ Adicionar Viatura</button>
+
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Viatura</th>
+                        <th>Motorista</th>
+                        <th>Encarregado</th>
+                        <th>Início</th>
+                        <th>Hora</th>
+                        <th>Fim</th>
+                        <th>Hora</th>
+                        <th>TPD</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                </tbody>
+            </table>
+
+            <button class="finalizar" onclick="salvarDados()">Finalizar Operação</button>
+
+        </main>
+
+    </div>
+
+    <script src="../scripts/app.js"></script>
+
+</body>
+
+</html>

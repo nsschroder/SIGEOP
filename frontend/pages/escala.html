@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGEOP - Planejamento de Escala</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <h2>SIGEOP</h2>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="escala.html" class="active">Planejamento</a>
+            <a href="sinc.html">Sincronização</a>
+            <a href="#">Configurações</a>
+        </aside>
+
+        <main class="content">
+            <header class="topbar">
+                <h1>Planejamento Operacional</h1>
+                <div class="user-info">Cia: 1ª PEL | Rio Claro</div>
+            </header>
+
+            <section class="controls" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+                    <h3>1. Parâmetros do Mês</h3><br>
+                    <label>Mês de Referência:</label>
+                    <input type="month" id="mes-planejamento" style="width: 100%; margin-bottom: 15px;">
+
+                    <label>Qual equipe começa o Dia 1 no turno da MANHÃ?</label>
+                    <select id="equipe-start" style="width: 100%;">
+                        <option value="A">Equipe ALPHA</option>
+                        <option value="B">Equipe BRAVO</option>
+                        <option value="C">Equipe CHARLIE</option>
+                        <option value="D">Equipe DELTA</option>
+                    </select>
+                </div>
+
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+                    <h3>2. Composição Base</h3><br>
+
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <strong>ALPHA:</strong>
+                        <input type="text" id="alpha-p1" placeholder="Motorista" style="flex:1;">
+                        <input type="text" id="alpha-p2" placeholder="Encarregado" style="flex:1;">
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <strong>BRAVO:</strong>
+                        <input type="text" id="bravo-p1" placeholder="Motorista" style="flex:1;">
+                        <input type="text" id="bravo-p2" placeholder="Encarregado" style="flex:1;">
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <strong>CHARLIE:</strong>
+                        <input type="text" id="charlie-p1" placeholder="Motorista" style="flex:1;">
+                        <input type="text" id="charlie-p2" placeholder="Encarregado" style="flex:1;">
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <strong>DELTA:</strong>
+                        <input type="text" id="delta-p1" placeholder="Motorista" style="flex:1;">
+                        <input type="text" id="delta-p2" placeholder="Encarregado" style="flex:1;">
+                    </div>
+                </div>
+
+                <button class="btn-primary" style="grid-column: span 2; padding: 15px; font-size: 16px;"
+                    onclick="gerarEscalaInteligente()">
+                    ⚙️ Processar Escala Automática
+                </button>
+            </section>
+
+            <div class="tabela-container">
+                <table class="tabela">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Turno DIA (06:45 - 19:00)</th>
+                            <th>Turno NOITE (18:45 - 07:00)</th>
+                            <th>Folgas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpo-escala">
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Preencha os dados acima e clique em Processar.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="finalizar" onclick="salvarPlanejamento()">
+                Confirmar Planejamento Mensal
+            </button>
+        </main>
+    </div>
+
+    <script src="../scripts/escala.js"></script>
+</body>
+
+</html>
