@@ -186,3 +186,47 @@ body {
 .finalizar:hover {
     filter: brightness(1.1);
 }
+
+/* Estilo para os botões de adicionar viatura */
+.btn-add-vtr {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f5f9;
+    /* Um cinza bem claro e limpo */
+    color: #475569;
+    /* Cinza escuro para o texto */
+    border: 1px dashed #cbd5e1;
+    /* Borda tracejada dá ideia de "espaço para adicionar" */
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    /* Ocupa a largura total do card */
+    margin-top: 8px;
+}
+
+.btn-add-vtr:hover {
+    background-color: #e2e8f0;
+    border-color: #94a3b8;
+    color: #1e293b;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-add-vtr:active {
+    transform: scale(0.98);
+}
+
+/* Pequeno ajuste nos cards de equipe para comportar os botões */
+.card-equipe-container {
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}

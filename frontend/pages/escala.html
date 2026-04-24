@@ -42,36 +42,49 @@
                 </div>
 
                 <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
-                    <h3>2. Composição Base</h3><br>
+                    <h3>2. Composição dos Pelotões</h3>
+                    <p style="font-size: 11px; color: #666; margin-bottom: 10px;">Adicione as viaturas de cada letra:
+                    </p>
 
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <strong>ALPHA:</strong>
-                        <input type="text" id="alpha-p1" placeholder="Motorista" style="flex:1;">
-                        <input type="text" id="alpha-p2" placeholder="Encarregado" style="flex:1;">
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <strong>BRAVO:</strong>
-                        <input type="text" id="bravo-p1" placeholder="Motorista" style="flex:1;">
-                        <input type="text" id="bravo-p2" placeholder="Encarregado" style="flex:1;">
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <strong>CHARLIE:</strong>
-                        <input type="text" id="charlie-p1" placeholder="Motorista" style="flex:1;">
-                        <input type="text" id="charlie-p2" placeholder="Encarregado" style="flex:1;">
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <strong>DELTA:</strong>
-                        <input type="text" id="delta-p1" placeholder="Motorista" style="flex:1;">
-                        <input type="text" id="delta-p2" placeholder="Encarregado" style="flex:1;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="card-equipe-container">
+                            <strong style="color: #1e293b; font-size: 14px;">ALPHA</strong>
+                            <div id="lista-vtrs-A"></div>
+                            <button onclick="addViatura('A')" class="btn-add-vtr">+ Adicionar Viatura</button>
+                        </div>
+
+                        <div class="card-equipe-container">
+                            <strong style="color: #1e293b; font-size: 14px;">BRAVO</strong>
+                            <div id="lista-vtrs-B"></div>
+                            <button onclick="addViatura('B')" class="btn-add-vtr">+ Adicionar Viatura</button>
+                        </div>
+
+                        <div class="card-equipe-container">
+                            <strong style="color: #1e293b; font-size: 14px;">CHARLIE</strong>
+                            <div id="lista-vtrs-C"></div>
+                            <button onclick="addViatura('C')" class="btn-add-vtr">+ Adicionar Viatura</button>
+                        </div>
+
+                        <div class="card-equipe-container">
+                            <strong style="color: #1e293b; font-size: 14px;">DELTA</strong>
+                            <div id="lista-vtrs-D"></div>
+                            <button onclick="addViatura('D')" class="btn-add-vtr">+ Adicionar Viatura</button>
+                        </div>
                     </div>
                 </div>
 
-                <button class="btn-primary" style="grid-column: span 2; padding: 15px; font-size: 16px;"
+                <button class="btn-primary"
+                    style="grid-column: span 2; padding: 15px; font-size: 16px; cursor: pointer;"
                     onclick="gerarEscalaInteligente()">
                     ⚙️ Processar Escala Automática
                 </button>
-            </section>
 
+                <button onclick="imprimirEscala()"
+                    style="grid-column: span 2; background: #1e293b; color: white; padding: 12px; border-radius: 6px; cursor: pointer; border: none; font-weight: 600;">
+                    🖨️ Gerar PDF / Impressão
+                </button>
+
+            </section>
             <div class="tabela-container">
                 <table class="tabela">
                     <thead>

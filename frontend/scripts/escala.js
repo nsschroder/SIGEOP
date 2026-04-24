@@ -1,74 +1,129 @@
-// O padrão do ciclo: 0=Dia, 1=Noite, 2=Folga, 3=Folga
-const cicloPadrao = ["DIA", "NOITE", "FOLGA", "FOLGA"];
+// Função para criar os campos de texto quando clicar no botão + Vtr
+function addViatura(letra) {
+    const container = document.getElementById(`lista-vtrs-${letra}`);
+    const div = document.createElement("div");
+    div.className = "linha-vtr-dinamica";
+    div.style = "display: flex; gap: 4px; margin-bottom: 5px; align-items: center;";
+
+    div.innerHTML = `
+    <input type="text" placeholder="Vtr" style="width: 45px; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;" class="vtr-prefixo">
+    <input type="text" placeholder="Mot" style="flex:1; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;" class="vtr-p1">
+    <input type="text" placeholder="Enc" style="flex:1; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;" class="vtr-p2">
+    <button onclick="this.parentElement.remove()" 
+            style="border:none; background:#fee2e2; color:#ef4444; width: 24px; height: 24px; border-radius: 4px; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center;">
+            ×
+    </button>
+`;
+    container.appendChild(div);
+}
 
 function gerarEscalaInteligente() {
     const mesInput = document.getElementById("mes-planejamento").value;
     const equipeQueInicia = document.getElementById("equipe-start").value;
     const corpoTabela = document.getElementById("corpo-escala");
 
-    if (!mesInput) {
-        alert("⚠️ Selecione o mês!");
-        return;
-    }
+    if (!mesInput) return alert("Selecione o mês!");
 
-    // Coletando os nomes dos policiais
-    const equipes = {
-        A: `${document.getElementById("alpha-p1").value} / ${document.getElementById("alpha-p2").value}`,
-        B: `${document.getElementById("bravo-p1").value} / ${document.getElementById("bravo-p2").value}`,
-        C: `${document.getElementById("charlie-p1").value} / ${document.getElementById("charlie-p2").value}`,
-        D: `${document.getElementById("delta-p1").value} / ${document.getElementById("delta-p2").value}`
-    };
-
-    // Define em qual dia do ciclo cada equipe começa com base na escolha do usuário
-    // Se a Equipe A começa de DIA (índice 0):
-    // A equipe que trabalhou Noite no dia anterior entra em Folga 1
-    // A matemática organiza o descompasso das 4 equipes.
-    let offsets = {};
-    if (equipeQueInicia === "A") { offsets = { A: 0, D: 1, C: 2, B: 3 }; }
-    if (equipeQueInicia === "B") { offsets = { B: 0, A: 1, D: 2, C: 3 }; }
-    if (equipeQueInicia === "C") { offsets = { C: 0, B: 1, A: 2, D: 3 }; }
-    if (equipeQueInicia === "D") { offsets = { D: 0, C: 1, B: 2, A: 3 }; }
+    // Captura as viaturas de cada card
+    const composicao = { A: [], B: [], C: [], D: [] };
+    ["A", "B", "C", "D"].forEach(letra => {
+        const linhas = document.querySelectorAll(`#lista-vtrs-${letra} .linha-vtr-dinamica`);
+        linhas.forEach(linha => {
+            const vtr = linha.querySelector(".vtr-prefixo").value;
+            const p1 = linha.querySelector(".vtr-p1").value;
+            const p2 = linha.querySelector(".vtr-p2").value;
+            if (vtr || p1 || p2) {
+                composicao[letra].push({ vtr, p1, p2 });
+            }
+        });
+    });
 
     const [ano, mes] = mesInput.split("-");
     const diasNoMes = new Date(ano, mes, 0).getDate();
-
     corpoTabela.innerHTML = "";
-    const planejamentoMensal = {};
+
+    // Lógica 12x36
+    const offsets = {
+        'A': { 'A': 0, 'D': 1, 'C': 2, 'B': 3 },
+        'B': { 'B': 0, 'A': 1, 'D': 2, 'C': 3 },
+        'C': { 'C': 0, 'B': 1, 'A': 2, 'D': 3 },
+        'D': { 'D': 0, 'C': 1, 'B': 2, 'A': 3 }
+    }[equipeQueInicia];
 
     for (let i = 1; i <= diasNoMes; i++) {
-        // Para calcular onde a equipe está no ciclo, usamos o módulo (%) de 4
-        const diaDoCiclo = i - 1;
+        let txtDia = "", txtNoite = "", folgas = [];
 
-        let eqDia = "", eqNoite = "", eqFolgas = [];
+        for (const [letra, offset] of Object.entries(offsets)) {
+            const status = ["DIA", "NOITE", "FOLGA", "FOLGA"][(i - 1 + offset) % 4];
+            const infoVtrs = composicao[letra].map(v => `[${v.vtr}] ${v.p1}/${v.p2}`).join("<br>");
 
-        // Verifica o status de cada equipe naquele dia específico
-        for (const [nomeEquipe, offset] of Object.entries(offsets)) {
-            const statusHoje = cicloPadrao[(diaDoCiclo + offset) % 4];
-
-            if (statusHoje === "DIA") eqDia = `Equipe ${nomeEquipe}: ${equipes[nomeEquipe]}`;
-            if (statusHoje === "NOITE") eqNoite = `Equipe ${nomeEquipe}: ${equipes[nomeEquipe]}`;
-            if (statusHoje === "FOLGA") eqFolgas.push(`Equipe ${nomeEquipe}`);
+            if (status === "DIA") txtDia = `<b>Eq. ${letra}</b><br>${infoVtrs || '---'}`;
+            else if (status === "NOITE") txtNoite = `<b>Eq. ${letra}</b><br>${infoVtrs || '---'}`;
+            else folgas.push(letra);
         }
-
-        const dataAtual = `${String(i).padStart(2, '0')}/${mes}/${ano}`;
-        const diaSemana = new Date(`${ano}-${mes}-${String(i).padStart(2, '0')}T00:00:00`).toLocaleDateString('pt-BR', { weekday: 'short' }).toUpperCase();
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td><strong>${dataAtual}</strong><br><small>${diaSemana}</small></td>
-            <td style="color: var(--secondary-blue); font-weight: bold;">☀️ ${eqDia}</td>
-            <td style="color: var(--accent-red); font-weight: bold;">🌙 ${eqNoite}</td>
-            <td style="color: var(--text-muted);">💤 ${eqFolgas.join(" e ")}</td>
+            <td>${i}/${mes}</td>
+            <td style="font-size: 12px;">${txtDia}</td>
+            <td style="font-size: 12px;">${txtNoite}</td>
+            <td><small>Eq. ${folgas.join(" e ")}</small></td>
         `;
         corpoTabela.appendChild(tr);
-
-        // Guarda os dados brutos para exportar pro Sinc depois
-        planejamentoMensal[`${ano}-${mes}-${String(i).padStart(2, '0')}`] = {
-            dia: eqDia,
-            noite: eqNoite
-        };
     }
+}
 
-    // Salva o planejamento no navegador de forma invisível
-    localStorage.setItem(`SIGEOP_PLANO_${ano}_${mes}`, JSON.stringify(planejamentoMensal));
+function imprimirEscala() {
+    const mesInput = document.getElementById("mes-planejamento").value;
+    if (!mesInput) return alert("Gere a escala antes de imprimir!");
+
+    const [ano, mesNum] = mesInput.split("-");
+    const mesesExtenso = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    const nomeMes = mesesExtenso[parseInt(mesNum) - 1];
+
+    const conteudoTabela = document.querySelector(".tabela").outerHTML;
+
+    // Criar uma nova janela para a impressão
+    const janelaImpressao = window.open('', '', 'width=900,height=700');
+
+    janelaImpressao.document.write(`
+        <html>
+        <head>
+            <title>SIGEOP - Escala ${nomeMes}/${ano}</title>
+            <style>
+                body { font-family: 'Inter', sans-serif; padding: 20px; color: #1e293b; }
+                .header-print { text-align: center; border-bottom: 2px solid #1e293b; margin-bottom: 20px; padding-bottom: 10px; }
+                h1 { margin: 0; font-size: 18pt; }
+                h2 { margin: 5px 0; font-size: 12pt; color: #64748b; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 10pt; }
+                th, td { border: 1px solid #cbd5e1; padding: 8px; text-align: left; }
+                th { background-color: #f1f5f9; font-weight: bold; }
+                .turno-dia { color: #000; }
+                .turno-noite { color: #000; }
+                b { color: #1e293b; }
+                @media print {
+                    .no-print { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header-print">
+                <h1>PLANO DE ESCALA OPERACIONAL - 12x36</h1>
+                <h2>SIGEOP | 1ª PEL - Rio Claro | Referência: ${nomeMes} de ${ano}</h2>
+            </div>
+            ${conteudoTabela}
+            <div style="margin-top: 30px; text-align: right; font-size: 9pt;">
+                Documento gerado eletronicamente pelo SIGEOP em ${new Date().toLocaleDateString()}
+            </div>
+        </body>
+        </html>
+    `);
+
+    janelaImpressao.document.close();
+
+    // Pequeno delay para garantir que os estilos carreguem antes de abrir o PDF
+    setTimeout(() => {
+        janelaImpressao.print();
+        janelaImpressao.close();
+    }, 500);
 }
