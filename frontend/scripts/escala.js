@@ -1,3 +1,25 @@
+let recursosDB = { viaturas: [], policiais: [] };
+
+async function carregarRecursosDoServidor() {
+    try {
+        const resposta = await fetch('http://localhost:3000/api/recursos');
+        recursosDB = await resposta.json();
+
+        // Preencher os datalists para o autocomplete
+        const dlVtrs = document.getElementById("lista-prefixos");
+        const dlPols = document.getElementById("lista-policiais");
+
+        dlVtrs.innerHTML = recursosDB.viaturas.map(v => `<option value="${v}">`).join("");
+        dlPols.innerHTML = recursosDB.policiais.map(p => `<option value="${p}">`).join("");
+
+    } catch (erro) {
+        console.error("Erro ao carregar recursos para escala:", erro);
+    }
+}
+
+// Chamar ao carregar a página
+document.addEventListener("DOMContentLoaded", carregarRecursosDoServidor);
+
 // Função para criar os campos de texto quando clicar no botão + Vtr
 function addViatura(letra) {
     const container = document.getElementById(`lista-vtrs-${letra}`);
@@ -84,6 +106,41 @@ function gerarEscalaInteligente() {
     localStorage.setItem(`ESCALA_${base}_${mesRef}`, JSON.stringify(dadosParaSalvar));
 
     alert(`Escala de ${base} processada e salva no sistema!`);
+}
+
+function salvarPlanejamento() {
+    const base = document.getElementById("base-unidade").value;
+    const mes = document.getElementById("mes-planejamento").value;
+
+    if (!mes || !base) {
+        return alert("Selecione a Base e o Mês antes de confirmar!");
+    }
+
+    // Captura o que está nos cards ALPHA, BRAVO, CHARLIE, DELTA
+    const obterDadosEquipe = (letra) => {
+        const linhas = document.querySelectorAll(`#lista-vtrs-${letra} .linha-vtr-dinamica`);
+        return Array.from(linhas).map(linha => ({
+            vtr: linha.querySelector(".vtr-prefixo").value,
+            p1: linha.querySelector(".vtr-p1").value,
+            p2: linha.querySelector(".vtr-p2").value
+        }));
+    };
+
+    const composicaoMensal = {
+        A: obterDadosEquipe('A'),
+        B: obterDadosEquipe('B'),
+        C: obterDadosEquipe('C'),
+        D: obterDadosEquipe('D')
+    };
+
+    // Salva com a chave que o app.js vai procurar
+    localStorage.setItem(`ESCALA_${base}_${mes}`, JSON.stringify({
+        base: base,
+        mes: mes,
+        escala: composicaoMensal
+    }));
+
+    alert("✅ Planejamento Mensal salvo com sucesso!");
 }
 
 function imprimirEscala() {

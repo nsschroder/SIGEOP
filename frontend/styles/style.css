@@ -39,6 +39,102 @@ body {
     z-index: -1;
 }
 
+/* TELA DE LOGIN - ESTILIZAÇÃO */
+
+.login-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--white);
+}
+
+.logo h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    margin-bottom: 5px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.login-box {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-box h2 {
+    color: var(--primary-blue);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.login-box input:focus {
+    border-color: var(--secondary-blue);
+    box-shadow: 0 0 0 3px rgba(22, 61, 107, 0.1);
+}
+
+.login-box button {
+    background: var(--primary-blue);
+    color: var(--white);
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-box button:hover {
+    background: var(--secondary-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+    position: absolute;
+    bottom: 30px;
+    color: var(--white);
+    opacity: 0.6;
+    font-size: 0.9rem;
+    text-align: center;
+    width: 100%;
+}
+
 /* LAYOUT PRINCIPAL */
 .dashboard {
     display: flex;
@@ -229,4 +325,94 @@ body {
     border-radius: 8px;
     background: #ffffff;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+tbody tr {
+    transition: background-color 0.3s ease;
+    /* Faz a cor mudar suavemente */
+}
+
+.status {
+    font-size: 1.2rem;
+    text-align: center;
+    width: 40px;
+}
+
+/* Estilização do Brasão */
+/* Container dos Brasões */
+.brasoes-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.brasao {
+    height: 85px;
+    /* Altura fixa para manter a proporção */
+    width: auto;
+    /* Efeito de "Glow" para destacar do fundo escuro */
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.brasao:hover {
+    transform: scale(1.05);
+    /* Leve pulo ao passar o mouse */
+}
+
+/* Linha sutil entre os dois brasões */
+.divisor-vertical {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+/* Ajuste no título para não ficar colado */
+.logo h1 {
+    font-size: 2.8rem;
+    margin-top: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Ajustes na caixa de login */
+.login-helper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.forgot-password {
+    color: var(--secondary-blue);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Link de Suporte */
+.suporte-link {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 10px;
+}
+
+.suporte-link a {
+    color: var(--accent-red);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Checkbox simples */
+.login-helper input[type="checkbox"] {
+    width: auto;
+    margin-right: 5px;
+    cursor: pointer;
 }
