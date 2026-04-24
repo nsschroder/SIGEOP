@@ -5,15 +5,13 @@ function addViatura(letra) {
     div.className = "linha-vtr-dinamica";
     div.style = "display: flex; gap: 4px; margin-bottom: 5px; align-items: center;";
 
+    // Criamos o HTML usando listas de sugestões (datalist)
     div.innerHTML = `
-    <input type="text" placeholder="Vtr" style="width: 45px; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;" class="vtr-prefixo">
-    <input type="text" placeholder="Mot" style="flex:1; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;" class="vtr-p1">
-    <input type="text" placeholder="Enc" style="flex:1; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px;" class="vtr-p2">
-    <button onclick="this.parentElement.remove()" 
-            style="border:none; background:#fee2e2; color:#ef4444; width: 24px; height: 24px; border-radius: 4px; cursor:pointer; font-weight:bold; display:flex; align-items:center; justify-content:center;">
-            ×
-    </button>
-`;
+        <input type="text" list="lista-prefixos" placeholder="Vtr" style="width: 45px;" class="vtr-prefixo">
+        <input type="text" list="lista-policiais" placeholder="Mot" style="flex:1;" class="vtr-p1">
+        <input type="text" list="lista-policiais" placeholder="Enc" style="flex:1;" class="vtr-p2">
+        <button onclick="this.parentElement.remove()" class="btn-remove">x</button>
+    `;
     container.appendChild(div);
 }
 
@@ -71,6 +69,21 @@ function gerarEscalaInteligente() {
         `;
         corpoTabela.appendChild(tr);
     }
+    // Criar o objeto de armazenamento
+    const base = document.getElementById("base-unidade").value;
+    const mesRef = document.getElementById("mes-planejamento").value; // Ex: 2026-04
+
+    // Este objeto vai guardar a escala do mês para esta base específica
+    const dadosParaSalvar = {
+        base: base,
+        mes: mesRef,
+        escala: composicao // Aqui estão as viaturas que você definiu nos cards
+    };
+
+    // Salva no LocalStorage com uma chave única, ex: "ESCALA_rio_claro_2026-04"
+    localStorage.setItem(`ESCALA_${base}_${mesRef}`, JSON.stringify(dadosParaSalvar));
+
+    alert(`Escala de ${base} processada e salva no sistema!`);
 }
 
 function imprimirEscala() {

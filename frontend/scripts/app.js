@@ -1,3 +1,21 @@
+function descobrirEquipeDeServico(dataSelecionada) {
+    // Data de referência (um dia que você sabe que a Equipe ALPHA começou cedo)
+    // Se no seu planejamento o Dia 1 do mês X é ALPHA, usamos o primeiro dia do mês como base.
+    const dataRef = new Date(dataSelecionada);
+    dataRef.setDate(1); // Ajusta para o dia 1 do mês da escala
+
+    const dataAlvo = new Date(dataSelecionada);
+
+    // Diferença em dias
+    const diffTempo = Math.abs(dataAlvo - dataRef);
+    const diffDias = Math.ceil(diffTempo / (1000 * 60 * 60 * 24));
+
+    // O ciclo 12x36 tem 4 posições: Equipe 1, Equipe 2, Equipe 3, Equipe 4
+    // A lógica deve bater com o "Giro" que você definiu no escala.js
+    const ciclo = ["A", "D", "C", "B"];
+    return ciclo[diffDias % 4];
+}
+
 // Variável global para armazenar o que vier do servidor
 let recursosDB = { viaturas: [], policiais: [], tpds: [] };
 let carregando = false;
@@ -124,42 +142,74 @@ function salvarDados() {
 }
 
 function carregarDados() {
-    const chave = gerarChave();
+    const chaveManual = gerarChave(); // Chave: sigeop_2026-04-24_rio_claro
     const tbody = document.querySelector("tbody");
-
-    // 🔥 1. Limpa a tabela independente de ter dados ou não
     tbody.innerHTML = "";
 
-    if (!chave) return;
+    if (!chaveManual) return;
 
-    const dadosBrutos = localStorage.getItem(chave);
-    if (!dadosBrutos) {
-        atualizarStatus();
-        return;
+    const dadosBrutos = localStorage.getItem(chaveManual);
+
+    if (dadosBrutos) {
+        // --- CASO 1: Já existem dados editados manualmente para hoje ---
+        const dados = JSON.parse(dadosBrutos);
+        carregando = true;
+        dados.forEach(item => preencherLinhaComDados(item));
+        carregando = false;
+    } else {
+        // --- CASO 2: Não há dados manuais, vamos buscar o PLANEJAMENTO MENSAL ---
+        const dataInput = document.getElementById("data-servico").value; // 2026-04-24
+        const baseInput = document.getElementById("base-servico").value; // rio_claro
+        const mesRef = dataInput.substring(0, 7); // 2026-04
+
+        const chaveMensal = `ESCALA_${baseInput}_${mesRef}`;
+        const planejamentoMensal = localStorage.getItem(chaveMensal);
+
+        if (planejamentoMensal) {
+            const plano = JSON.parse(planejamentoMensal);
+            const equipeHoje = descobrirEquipeDeServico(dataInput); // Ex: "B"
+            const viaturasPlanejadas = plano.escala[equipeHoje]; // Puxa as vtrs da Equipe B
+
+            if (viaturasPlanejadas && viaturasPlanejadas.length > 0) {
+                console.log(`💡 Carregando planejamento mensal para Equipe ${equipeHoje}`);
+                carregando = true;
+                viaturasPlanejadas.forEach(vtrPlan => {
+                    preencherLinhaComDados({
+                        viatura: vtrPlan.vtr,
+                        motorista: vtrPlan.p1,
+                        encarregado: vtrPlan.p2,
+                        dataInicio: dataInput,
+                        horaInicio: "06:45", // Horário padrão manhã
+                        dataFim: dataInput,
+                        horaFim: "19:00",
+                        tpd: "NÃO"
+                    });
+                });
+                carregando = false;
+            }
+        }
     }
-
-    const dados = JSON.parse(dadosBrutos);
-
-    // Bloqueia o salvamento automático enquanto reconstrói a tabela
-    carregando = true;
-
-    dados.forEach(item => {
-        adicionarLinha();
-        const linha = tbody.lastElementChild;
-
-        linha.querySelector(".viatura").value = item.viatura || "";
-        linha.querySelectorAll(".policial")[0].value = item.motorista || "";
-        linha.querySelectorAll(".policial")[1].value = item.encarregado || "";
-        linha.querySelector(".data-inicio").value = item.dataInicio || "";
-        linha.querySelector(".hora-inicio").value = item.horaInicio || "";
-        linha.querySelector(".data-fim").value = item.dataFim || "";
-        linha.querySelector(".hora-fim").value = item.horaFim || "";
-        linha.querySelector(".tpd").value = item.tpd || "";
-    });
-
-    carregando = false;
     atualizarStatus();
-    console.log("CARREGADO DE:", chave);
+}
+
+// Função auxiliar para evitar repetição de código
+function preencherLinhaComDados(item) {
+    adicionarLinha();
+    const tbody = document.querySelector("tbody");
+    const linha = tbody.lastElementChild;
+
+    // Tenta selecionar os valores nos selects (se existirem no banco)
+    if (item.viatura) linha.querySelector(".viatura").value = item.viatura;
+
+    const policiais = linha.querySelectorAll(".policial");
+    if (item.motorista) policiais[0].value = item.motorista;
+    if (item.encarregado) policiais[1].value = item.encarregado;
+
+    linha.querySelector(".data-inicio").value = item.dataInicio || "";
+    linha.querySelector(".hora-inicio").value = item.horaInicio || "";
+    linha.querySelector(".data-fim").value = item.dataFim || "";
+    linha.querySelector(".hora-fim").value = item.horaFim || "";
+    if (item.tpd) linha.querySelector(".tpd").value = item.tpd;
 }
 
 function atualizarStatus() {
